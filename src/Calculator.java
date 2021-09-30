@@ -1,9 +1,3 @@
-/*
-
-Think about parenthesis and chain
-exceptions, check result is within integer bounds
- */
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -20,6 +14,14 @@ public class Calculator implements ActionListener {
     JPanel panel;//Panel contains numerical buttons and calculation operators
     static boolean errorFlag = false;
 
+
+    /*
+        Input: None
+        Output: None
+        Description: This is the constructor which initializes the calculator. In this class we create the JFrame for
+        the application, the JTextfield to display the input/output of the calculator, and create the buttons for
+        the calculator. All buttons have ActionListners to process each button being pressed.
+     */
     Calculator() {
 
         frame = new JFrame("Calculator");
@@ -114,11 +116,23 @@ public class Calculator implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /*
+     Input: String Arguments
+     Output: None
+     Description: This is the main class which creates a Calculator instance
+     */
     public static void main(String[] args) {
 
         Calculator calc = new Calculator();
     }
-
+    /*
+     Input: ActionEvents(when buttons are pressed)
+     Output: None
+     Description: This processes buttons being pressed. If a button is pressed, we go through the if-else ladder to process
+     what to do according to the button. If equal is pressed we calculate the expression on screen and displaying the output.
+     if negative is pressed, we invert the sign of the number. If clear is pressed, we clear the screen. If delete is pressed
+     we remove the last character from the right.
+    */
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -157,7 +171,16 @@ public class Calculator implements ActionListener {
             screen.setText(screen.getText() + command);
         }
     }
-
+    /*
+      Input: Expression string we are trying to calculate
+      Output: None
+      Description: Given a expression string we use this function to parse the elements of the string to compute the
+      corresponding answer. We use a stack to give a high order to multiplication and division. For numbers, we use the formula
+      below to construct the numerical values since we process the string left to right. For math operators, we push
+      addition and subtraction numbers back on to the stack and only calculating multiplication and division first which
+      the results then pushed back onto the stack. Finally we iterate through the stack and add all of the numbers and return
+      this result.
+    */
     public static int calculate(String s) {
         //Error check String
         if (s == null || s.length() == 0)
@@ -171,7 +194,7 @@ public class Calculator implements ActionListener {
             //Check if current character is a digit
             if (Character.isDigit(s.charAt(i)))
                 calculate = calculate * 10 + s.charAt(i) - '0'; //use this formula to calculate the digit since we move left to right
-            if ((!Character.isDigit(s.charAt(i))) || i == s.length() - 1) {//Proform opperation
+            if ((!Character.isDigit(s.charAt(i))) || i == s.length() - 1) {//Perform opperation
                 if (sign == '+')
                     stack.push(calculate);
                 else if (sign == '-')
@@ -184,14 +207,11 @@ public class Calculator implements ActionListener {
                         return -1;
                     }
                     else{
-
                         stack.push(stack.pop() / calculate);
                     }
                 }
                 else if( sign == '^'){
-                    //stack.push((int)Math.pow(stack.pop(), calculate));
-                    Double tan = Math.sqrt((double)(calculate));
-                    stack.push(tan.intValue());
+                    stack.push((int)Math.pow(stack.pop(), calculate));
                 }
                 sign = s.charAt(i);
                 calculate = 0;
