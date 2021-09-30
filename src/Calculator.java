@@ -137,10 +137,16 @@ public class Calculator implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
-       if (e.getSource()==equButton) {
+        if (e.getSource()==equButton) {
             String expr = screen.getText();
             //Calculate string expression
-            Integer ans = calculate(expr);
+            Integer ans = 0;
+            try{
+                ans = calculate(expr);
+            }
+            catch (Exception er){
+                screen.setText("Error:" + er.toString());
+            }
             if(errorFlag == true) {
                 screen.setText("ERROR");
                 errorFlag = false;
@@ -156,18 +162,18 @@ public class Calculator implements ActionListener {
         }
         else if (e.getSource() == clrButton) {
             //Set screen to empty
-           screen.setText("");
-       }
-       else if(e.getSource()==delButton) {
-           //Delete last character of string by by outputting all character except the last
+            screen.setText("");
+        }
+        else if(e.getSource()==delButton) {
+            //Delete last character of string by by outputting all character except the last
             String string = screen.getText();
-           screen.setText("");
+            screen.setText("");
             for(int i=0;i<string.length()-1;i++) {
                 screen.setText(screen.getText()+string.charAt(i));
             }
         }
-       else {
-           //Should NOT get here
+        else {
+            //Should NOT get here
             screen.setText(screen.getText() + command);
         }
     }
