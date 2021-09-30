@@ -18,7 +18,7 @@ public class Calculator implements ActionListener {
     JButton addButton, subButton, mulButton, divButton;
     JButton testButton, equButton, delButton, clrButton, negButton;
     JPanel panel;//Panel contains numerical buttons and calculation operators
-    boolean errorFlag = false;
+    static boolean errorFlag = false;
 
     Calculator() {
 
@@ -51,7 +51,7 @@ public class Calculator implements ActionListener {
         divButton.addActionListener(this);
         divButton.setFont(new java.awt.Font("Sans Serif", 2, 18)); // NOI18N
         divButton.setBackground(Color.LIGHT_GRAY);
-        testButton = new JButton("");
+        testButton = new JButton("^");
         testButton.addActionListener(this);
         testButton.setFont(new java.awt.Font("Sans Serif", 2, 18)); // NOI18N
         testButton.setBackground(Color.LIGHT_GRAY);
@@ -59,7 +59,7 @@ public class Calculator implements ActionListener {
         equButton.addActionListener(this);
         equButton.setFont(new java.awt.Font("Sans Serif", 2, 18)); // NOI18N
         equButton.setBackground(Color.LIGHT_GRAY);
-        delButton = new JButton("DEL");
+        delButton = new JButton("<--");
         delButton.addActionListener(this);
         delButton.setFont(new java.awt.Font("Sans Serif", 2, 18));// NOI18N
         delButton.setBackground(Color.LIGHT_GRAY);
@@ -158,12 +158,13 @@ public class Calculator implements ActionListener {
         }
     }
 
-    public int calculate(String s) {
+    public static int calculate(String s) {
         //Error check String
         if (s == null || s.length() == 0)
             return 0;
         int calculate = 0;
         char sign = '+';
+        //Use a stack to calculate  * and / first and push answer onto stack
         Stack<Integer> stack = new Stack();
         //Iterate throught expression from left to right
         for (int i=0; i<s.length(); i++) {
@@ -183,9 +184,15 @@ public class Calculator implements ActionListener {
                         return -1;
                     }
                     else{
+
                         stack.push(stack.pop() / calculate);
                     }
-            }
+                }
+                else if( sign == '^'){
+                    //stack.push((int)Math.pow(stack.pop(), calculate));
+                    Double tan = Math.sqrt((double)(calculate));
+                    stack.push(tan.intValue());
+                }
                 sign = s.charAt(i);
                 calculate = 0;
             }
